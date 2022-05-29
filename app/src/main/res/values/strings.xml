@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Alciphron</string>
+    <string name="export_to_txt_file">Export to TXT file</string>
+    <string name="export_to_csv_file">Export to CSV file</string>
+</resources>

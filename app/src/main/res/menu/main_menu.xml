@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/txtFileItem"
+        android:title="@string/export_to_txt_file" />
+    <item
+        android:id="@+id/csvFileItem"
+        android:title="@string/export_to_csv_file" />
+    <item
+        android:id="@+id/settingsItem"
+        android:title="Settings" />
+</menu>
