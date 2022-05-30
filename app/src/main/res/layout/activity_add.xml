@@ -50,6 +50,19 @@
         app:layout_constraintTop_toBottomOf="@+id/addDate" />
 
     <TextView
+        android:id="@+id/datum7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Nadmorska visina"
+        android:textColor="#0d6d3d"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/geoLatitude" />
+
+    <TextView
         android:id="@+id/datum3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -114,6 +127,18 @@
         app:layout_constraintTop_toBottomOf="@+id/datum" />
 
     <TextView
+        android:id="@+id/geoAltitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="0"
+        android:textColor="#a2a2a3"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/datum7" />
+
+    <TextView
         android:id="@+id/finderName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -151,10 +176,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="preuzmi lokaciju"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/geoLatitude" />
+        app:layout_constraintTop_toBottomOf="@+id/geoAltitude" />
 
     <EditText
         android:id="@+id/addDescription"

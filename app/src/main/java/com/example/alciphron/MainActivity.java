@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     public static List<AlciphronModel> alciphronModelList = new ArrayList<>();
     String geoLatitude = "";
     String geoLongitude ="";
+    String geoAltitude="";
     private static final String FILE_NAME = "alciphronBaza.txt";
     private static final String FILE_NAME_CSV = "alciphronBazaCSV.csv";
 
@@ -115,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
                 bundle.putSerializable("alciphronObject",alciphronModel);
                 bundle.putSerializable("geoLatitude",geoLatitude);
                 bundle.putSerializable("geoLongitude",geoLongitude);
+                bundle.putSerializable("geoAltitude",geoAltitude);
                 intent.putExtras(bundle);
 
                 startActivity(intent);
@@ -172,11 +174,11 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 writer = new CSVWriter(new FileWriter(file.getPath()));
             }
-            String dataFirstRow[] = {"Naziv vrste","Datum pronalaska","Geo.sirina","Geo.duzina","Pronalazac","Napomena"};
+            String dataFirstRow[] = {"Naziv vrste","Datum pronalaska","Geo.sirina","Geo.duzina","Nadmorska visina","Pronalazac","Napomena"};
             writer.writeNext(dataFirstRow);
 
             for(AlciphronModel a : alciphronModelList) {
-                String[] data = {a.getName(),a.getDate(),a.getLatitude(),a.getLongitude(),a.getFinder(),a.getDescription()};
+                String[] data = {a.getName(),a.getDate(),a.getLatitude(),a.getLongitude(),a.getAltitude(),a.getFinder(),a.getDescription()};
                 writer.writeNext(data);
             }
             writer.close();
@@ -197,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             FileOutputStream fos = new FileOutputStream(file);
             for(AlciphronModel a : alciphronModelList){
-                text = a.getName() + "|" + a.getDate() + "|" + a.getLatitude() + "|" + a.getLongitude() + "|" + a.getFinder() + "|" + a.getDescription() + "\n";
+                text = a.getName() + "|" + a.getDate() + "|" + a.getLatitude() + "|" + a.getLongitude() + "|"+ a.getAltitude() +"|"+ a.getFinder() + "|" + a.getDescription() + "\n";
                 fos.write(text.getBytes());
             }
 
@@ -236,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
             public void onLocationChanged(@NonNull Location location) {
                 geoLatitude = String.valueOf(location.getLatitude());
                 geoLongitude = String.valueOf(location.getLongitude());
+                geoAltitude = String.valueOf(location.getAltitude());
             }
         });
 

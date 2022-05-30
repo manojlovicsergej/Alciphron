@@ -75,8 +75,7 @@ public class AddActivity extends AppCompatActivity {
     protected Location mLastLocation;
     private TextView geoLatitude;
     private TextView geoLongitude;
-    public static String getLatitude = "";
-    public static String getLongitude = "";
+    private TextView geoAltitude;
 
 
     private Button getLocationButton;
@@ -116,6 +115,7 @@ public class AddActivity extends AppCompatActivity {
         buttonDate = findViewById(R.id.buttonDate);
         geoLatitude = findViewById(R.id.geoLatitude);
         geoLongitude = findViewById(R.id.geoLongitude);
+        geoAltitude = findViewById(R.id.geoAltitude);
         getLocationButton = findViewById(R.id.getLocationButton);
         finderName = findViewById(R.id.finderName);
         addDescription = findViewById(R.id.addDescription);
@@ -236,9 +236,10 @@ public class AddActivity extends AppCompatActivity {
                 String description = addDescription.getText().toString();
                 String longitude = geoLongitude.getText().toString();
                 String latitude = geoLatitude.getText().toString();
+                String altitude = geoAltitude.getText().toString();
                 String finder = finderName.getText().toString();
 
-                AlciphronModel ad = new AlciphronModel(name, date, description, longitude, latitude, finder);
+                AlciphronModel ad = new AlciphronModel(name, date, description, longitude, latitude,altitude, finder);
 
                 alciphronDatabase.alciphronDAO().InsertAll(ad);
 
@@ -258,11 +259,6 @@ public class AddActivity extends AppCompatActivity {
 
         loadData();
 
-    }
-
-    public void setDefaultLocation(){
-        geoLatitude.setText(getIntent().getSerializableExtra("geoLatitude").toString());
-        geoLongitude.setText(getIntent().getSerializableExtra("geoLongitude").toString());
     }
 
     public void showDatePickerDialog(View v) {
@@ -287,6 +283,7 @@ public class AddActivity extends AppCompatActivity {
             public void onLocationChanged(@NonNull Location location) {
                 geoLatitude.setText(String.valueOf(location.getLatitude()));
                 geoLongitude.setText(String.valueOf(location.getLongitude()));
+                geoAltitude.setText(String.valueOf(location.getAltitude()));
             }
         });
 

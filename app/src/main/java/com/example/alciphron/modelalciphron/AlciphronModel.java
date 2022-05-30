@@ -28,27 +28,39 @@ public class AlciphronModel implements Serializable {
     @ColumnInfo(name="latitude")
     private String latitude;
 
+    @ColumnInfo(name="altitude")
+    private String altitude;
+
     @ColumnInfo(name="finder")
     private String finder;
 
 
-    public AlciphronModel( String name, String date, String description, String longitude, String latitude, String finder) {
+    public AlciphronModel( String name, String date, String description, String longitude, String latitude , String altitude, String finder) {
         this.name = name;
         this.date = date;
         this.description = description;
         this.longitude = longitude;
         this.latitude = latitude;
         this.finder = finder;
+        this.altitude = altitude;
     }
 
     public AlciphronModel(){
         this.name = "";
         this.date ="19/5/2022";
         this.description =  "";
-        this.longitude =  "";
-        this.latitude =  "";
+        this.longitude =  "0";
+        this.latitude =  "0";
         this.finder =  "";
+        this.altitude="0";
+    }
 
+    public String getAltitude() {
+        return altitude;
+    }
+
+    public void setAltitude(String altitude) {
+        this.altitude = altitude;
     }
 
     public int getId() {
@@ -111,10 +123,11 @@ public class AlciphronModel implements Serializable {
         return "AlciphronModel{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", date=" + date +
+                ", date='" + date + '\'' +
                 ", description='" + description + '\'' +
                 ", longitude='" + longitude + '\'' +
                 ", latitude='" + latitude + '\'' +
+                ", altitude='" + altitude + '\'' +
                 ", finder='" + finder + '\'' +
                 '}';
     }
