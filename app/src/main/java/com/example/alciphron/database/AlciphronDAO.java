@@ -20,5 +20,8 @@ public interface AlciphronDAO {
     @Query("DELETE FROM alciphronmodel WHERE id=:idPassed")
     void deleteAlciphron(int idPassed);
 
+    @Query("DELETE FROM alciphronmodel")
+    void deleteAllAlciphron();
+
 
 }

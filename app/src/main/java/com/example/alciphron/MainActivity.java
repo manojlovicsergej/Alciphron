@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
+import androidx.room.RoomDatabase;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -150,6 +151,9 @@ public class MainActivity extends AppCompatActivity {
         if(id == R.id.csvFileItem){
             exportToCSVFile();
         }
+        if(id == R.id.obrisiItem){
+            deleteAllAlciphron();
+        }
         if(id == R.id.settingsItem){
             startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
         }
@@ -157,6 +161,21 @@ public class MainActivity extends AppCompatActivity {
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void deleteAllAlciphron(){
+
+
+        AlciphronDatabase ad = Room.databaseBuilder(getApplicationContext(),AlciphronDatabase.class,"alciphron").allowMainThreadQueries().build();
+        ad.alciphronDAO().deleteAllAlciphron();
+
+        ad.close();
+
+        alciphronModelList.clear();
+        alciphronAdapter.notifyDataSetChanged();
+
+        Toast.makeText(getApplicationContext(),"Uspesno obrisano !",Toast.LENGTH_SHORT).show();
+
     }
 
     private void exportToCSVFile(){

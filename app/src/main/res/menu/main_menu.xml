@@ -8,6 +8,9 @@
         android:id="@+id/csvFileItem"
         android:title="@string/export_to_csv_file" />
     <item
+        android:id="@+id/obrisiItem"
+        android:title="Obrisi sve" />
+    <item
         android:id="@+id/settingsItem"
-        android:title="Settings" />
+        android:title="Podesavanja" />
 </menu>
