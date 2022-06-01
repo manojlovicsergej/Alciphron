@@ -2,6 +2,10 @@
 Android aplikacija za pracenje vrsta leptira i insekata na teritoriji Srbije koristeci GPS location sistem. Skladistenje lokacija pronadjenih vrsta u bazu podataka
 koja moze da se eksportuje u vidu csv ili txt file-a. 
 
+Links to download apk's versions :
+  https://mega.nz/file/uOxTXayZ#r1BfGq7HaRfobRyirk03S3Q-0ulxTkQHKP4oGTR9Jmc  [version1.0.2]
+  https://mega.nz/file/bfJG3YzZ#cfeJELpWyCrYZWSQ-Ykjtt6QlQ3l__2dOnceZ4YP6l4  [version1.0.1]
+
 [version 1.0.2]
   - izmenjen naziv Settings item-a u Podesavanja
   - dodat novi meni item Obrisi sve koji brise sve iz liste
