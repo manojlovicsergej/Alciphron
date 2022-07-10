@@ -41,6 +41,11 @@ import com.example.alciphron.settings.SettingsActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.opencsv.CSVWriter;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -62,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     String geoAltitude="";
     private static final String FILE_NAME = "alciphronBaza.txt";
     private static final String FILE_NAME_CSV = "alciphronBazaCSV.csv";
+    private static final String FILE_NAME_XLS = "alciphronBazaXLS.xls";
 
     private LocationManager locationManager;
 
@@ -72,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1000);
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},1000);
         }
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -151,6 +157,9 @@ public class MainActivity extends AppCompatActivity {
         if(id == R.id.csvFileItem){
             exportToCSVFile();
         }
+        if(id == R.id.xlsFileItem){
+            exportToXLSFile();
+        }
         if(id == R.id.obrisiItem){
             deleteAllAlciphron();
         }
@@ -193,11 +202,11 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 writer = new CSVWriter(new FileWriter(file.getPath()));
             }
-            String dataFirstRow[] = {"Naziv vrste","Datum pronalaska","Geo.sirina","Geo.duzina","Nadmorska visina","Pronalazac","Napomena"};
+            String dataFirstRow[] = {"Naziv vrste","Stadijum","Datum pronalaska","Geo.sirina","Geo.duzina","Nadmorska visina","Pronalazac","Napomena"};
             writer.writeNext(dataFirstRow);
 
             for(AlciphronModel a : alciphronModelList) {
-                String[] data = {a.getName(),a.getDate(),a.getLatitude(),a.getLongitude(),a.getAltitude(),a.getFinder(),a.getDescription()};
+                String[] data = {a.getCode(),a.getStadijum(),a.getDate(),a.getLatitude(),a.getLongitude(),a.getAltitude(),a.getFinder(),a.getDescription()};
                 writer.writeNext(data);
             }
             writer.close();
@@ -218,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             FileOutputStream fos = new FileOutputStream(file);
             for(AlciphronModel a : alciphronModelList){
-                text = a.getName() + "|" + a.getDate() + "|" + a.getLatitude() + "|" + a.getLongitude() + "|"+ a.getAltitude() +"|"+ a.getFinder() + "|" + a.getDescription() + "\n";
+                text = a.getCode() + "|"+ a.getStadijum() +"|" + a.getDate() + "|" + a.getLatitude() + "|" + a.getLongitude() + "|"+ a.getAltitude() +"|"+ a.getFinder() + "|" + a.getDescription() + "\n";
                 fos.write(text.getBytes());
             }
 
@@ -232,6 +241,74 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+    private void exportToXLSFile(){
+
+        File fileDir = getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
+        File file  = new File(fileDir,FILE_NAME_XLS);
+
+        HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
+        HSSFSheet hssfSheet = hssfWorkbook.createSheet("Alciphron");
+
+
+        HSSFRow hssfRow = hssfSheet.createRow(0);
+        HSSFCell hssfCell = hssfRow.createCell(0);
+
+        for(int i = 0 ; i < alciphronModelList.size();i++){
+            hssfRow = hssfSheet.createRow(i);
+            for(int j = 0 ; j < 8;j++){
+                hssfCell = hssfRow.createCell(j);
+
+
+                if(j == 0){
+                    hssfCell.setCellValue(alciphronModelList.get(i).getCode());
+                }
+                if(j == 1){
+                    hssfCell.setCellValue(alciphronModelList.get(i).getStadijum());
+                }
+                if(j == 2){
+                    hssfCell.setCellValue(alciphronModelList.get(i).getDate());
+                }
+                if(j == 3){
+                    hssfCell.setCellValue(alciphronModelList.get(i).getLatitude());
+                }
+                if(j == 4){
+                    hssfCell.setCellValue(alciphronModelList.get(i).getLongitude());
+                }
+                if(j == 5){
+                    hssfCell.setCellValue(alciphronModelList.get(i).getAltitude());
+                }
+                if(j == 6){
+                    hssfCell.setCellValue(alciphronModelList.get(i).getFinder());
+                }
+                if(j == 7){
+                    hssfCell.setCellValue(alciphronModelList.get(i).getDescription());
+                }
+
+            }
+        }
+
+        try {
+            if (!file.exists()){
+                file.createNewFile();
+            }
+
+            FileOutputStream fileOutputStream= new FileOutputStream(file);
+            hssfWorkbook.write(fileOutputStream);
+
+            if (fileOutputStream!=null){
+                fileOutputStream.flush();
+                fileOutputStream.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Toast.makeText(getApplicationContext(),"Uspesno sacuvan XLS file !",Toast.LENGTH_LONG).show();
+
+
+    }
+
 
     @SuppressLint("MissingSuperCall")
     @Override
@@ -257,7 +334,7 @@ public class MainActivity extends AppCompatActivity {
             public void onLocationChanged(@NonNull Location location) {
                 geoLatitude = String.valueOf(location.getLatitude());
                 geoLongitude = String.valueOf(location.getLongitude());
-                geoAltitude = String.valueOf(location.getAltitude());
+                geoAltitude = String.valueOf((int)location.getAltitude());
             }
         });
 

@@ -8,6 +8,9 @@
         android:id="@+id/csvFileItem"
         android:title="@string/export_to_csv_file" />
     <item
+        android:id="@+id/xlsFileItem"
+        android:title="Export to XLS file" />
+    <item
         android:id="@+id/obrisiItem"
         android:title="Obrisi sve" />
     <item

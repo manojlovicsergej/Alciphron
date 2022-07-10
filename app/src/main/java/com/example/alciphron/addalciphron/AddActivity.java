@@ -30,6 +30,9 @@ import android.text.Html;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -47,6 +50,7 @@ import com.example.alciphron.R;
 import com.example.alciphron.database.AlciphronDatabase;
 import com.example.alciphron.database.InitDataSpecies;
 import com.example.alciphron.modelalciphron.AlciphronModel;
+import com.example.alciphron.settings.SettingsActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -62,6 +66,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import uk.me.jstott.jcoord.LatLng;
+import uk.me.jstott.jcoord.OSRef;
+
 
 public class AddActivity extends AppCompatActivity {
 
@@ -71,7 +78,7 @@ public class AddActivity extends AppCompatActivity {
     private Button buttonDate;
     private Button buttonAddBack;
     private static final String TAG = MainActivity.class.getSimpleName();
-
+    public Spinner spinnerStadium;
 
     protected Location mLastLocation;
     private TextView geoLatitude;
@@ -79,7 +86,6 @@ public class AddActivity extends AppCompatActivity {
     private TextView geoAltitude;
 
 
-    private Button getLocationButton;
     private TextView finderName;
     private EditText addDescription;
     private Button buttonDodaj;
@@ -94,6 +100,8 @@ public class AddActivity extends AppCompatActivity {
 
 
     ArrayList<String> alciphronList;
+    ArrayList<String> alciphronListCodes;
+    int alciphronCode = 0;
     Dialog dialog;
 
     @Override
@@ -111,18 +119,18 @@ public class AddActivity extends AppCompatActivity {
         ColorDrawable cd = new ColorDrawable(Color.parseColor("#ffffff"));
         actionBar.setBackgroundDrawable(cd);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         addDate = findViewById(R.id.addDate);
         buttonDate = findViewById(R.id.buttonDate);
         geoLatitude = findViewById(R.id.geoLatitude);
         geoLongitude = findViewById(R.id.geoLongitude);
         geoAltitude = findViewById(R.id.geoAltitude);
-        getLocationButton = findViewById(R.id.getLocationButton);
         finderName = findViewById(R.id.finderName);
         addDescription = findViewById(R.id.addDescription);
         buttonDodaj = findViewById(R.id.buttonDodaj);
         addDate.setText(sdf.format(new Date()));
         buttonAddBack = findViewById(R.id.buttonAddBack);
+        spinnerStadium = findViewById(R.id.spinnerStadium);
         //Location
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         //
@@ -138,6 +146,7 @@ public class AddActivity extends AppCompatActivity {
         alciphronName = findViewById(R.id.alciphronName);
         alciphronList = new ArrayList<>();
         alciphronList = initData();
+        alciphronListCodes = initDataCodes();
 
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -194,6 +203,7 @@ public class AddActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         alciphronName.setText(arrayAdapter.getItem(i));
+                        alciphronCode = i;
                         dialog.dismiss();
                     }
                 });
@@ -203,23 +213,6 @@ public class AddActivity extends AppCompatActivity {
         });
 
 
-
-        getLocationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                mFusedLocationClient = LocationServices.getFusedLocationProviderClient(AddActivity.this);
-
-
-                if (ActivityCompat.checkSelfPermission(AddActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    getLocation();
-                } else {
-                    ActivityCompat.requestPermissions(AddActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
-                }
-
-
-            }
-        });
 
         buttonAddBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -232,19 +225,42 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                String name = alciphronName.getText().toString();
-                String date = addDate.getText().toString();
-                String description = addDescription.getText().toString();
-                String longitude = geoLongitude.getText().toString();
-                String latitude = geoLatitude.getText().toString();
-                String altitude = geoAltitude.getText().toString();
-                String finder = finderName.getText().toString();
+                if(checkIfAllFieldsAreFilled()){
+                    String name = alciphronName.getText().toString();
+                    String date = addDate.getText().toString();
+                    String description = addDescription.getText().toString();
+                    String longitude = geoLongitude.getText().toString();
+                    String latitude = geoLatitude.getText().toString();
+                    String altitude = geoAltitude.getText().toString();
+                    String finder = finderName.getText().toString();
 
-                AlciphronModel ad = new AlciphronModel(name, date, description, longitude, latitude,altitude, finder);
 
-                alciphronDatabase.alciphronDAO().InsertAll(ad);
+                    //Converting Lat And Long to UTM format
 
-                startActivity(new Intent(AddActivity.this, MainActivity.class));
+                    double latitudeLocation = Double.parseDouble(latitude);
+                    double longitudeLocation = Double.parseDouble(longitude);
+
+
+                    LatLng latLng = new LatLng(latitudeLocation, longitudeLocation);
+                    OSRef osRef = latLng.toOSRef();
+                    double easting = osRef.getEasting();
+                    double northing = osRef.getNorthing();
+
+                    //
+
+                    AlciphronModel ad = new AlciphronModel(name, date, description, northing+"", easting+"",altitude, finder);
+                    ad.setCode(alciphronListCodes.get(alciphronCode)+"");
+                    ad.setStadijum(spinnerStadium.getSelectedItem().toString());
+                    alciphronDatabase.alciphronDAO().InsertAll(ad);
+
+                    startActivity(new Intent(AddActivity.this, MainActivity.class));
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"Proverite da li ste uneli sve podatke !",Toast.LENGTH_LONG).show();
+                }
+
+
+
 
 
             }
@@ -260,6 +276,16 @@ public class AddActivity extends AppCompatActivity {
 
         loadData();
 
+    }
+
+    private boolean checkIfAllFieldsAreFilled(){
+
+        if(alciphronName.getText().toString().equals("Izaberite vrstu") || alciphronName.getText().toString().equals("") || alciphronName.equals(null)){
+            return false;
+        }
+
+
+        return true;
     }
 
     public void showDatePickerDialog(View v) {
@@ -284,7 +310,7 @@ public class AddActivity extends AppCompatActivity {
             public void onLocationChanged(@NonNull Location location) {
                 geoLatitude.setText(String.valueOf(location.getLatitude()));
                 geoLongitude.setText(String.valueOf(location.getLongitude()));
-                geoAltitude.setText(String.valueOf(location.getAltitude()));
+                geoAltitude.setText(String.valueOf((int)location.getAltitude()));
             }
         });
 
@@ -306,7 +332,24 @@ public class AddActivity extends AppCompatActivity {
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
-            addDate.setText(day+"/"+(month+1)+"/"+year);
+            //addDate.setText(day+"/"+(month+1)+"/"+year);
+            String newDay = "";
+            if(day<10){
+                newDay="0"+day;
+            }
+            else{
+                newDay =day+"";
+            }
+
+
+            String newMonth = "";
+            if((month+1)<10){
+                newMonth="0"+(month+1);
+            }
+            else{
+                newMonth = month+1+"";
+            }
+            addDate.setText(year+"-"+newMonth+"-"+newDay);
         }
     }
 
@@ -318,6 +361,48 @@ public class AddActivity extends AppCompatActivity {
 
         items.addAll(items1);
         return items;
+    }
+
+    private ArrayList<String>initDataCodes(){
+        ArrayList<String> items = new ArrayList<>();
+        items = InitDataSpecies.initDataCode();
+        ArrayList<String> items1 = new ArrayList<>();
+        items1 = InitDataSpecies.initDataCodesRest();
+
+        items.addAll(items1);
+
+        return items;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.addactivity_menu,menu);
+
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        int id = item.getItemId();
+
+        if(id == R.id.getLocation){
+            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(AddActivity.this);
+
+
+            if (ActivityCompat.checkSelfPermission(AddActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                getLocation();
+            } else {
+                ActivityCompat.requestPermissions(AddActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
+            }
+        }
+
+
+
+
+        return super.onOptionsItemSelected(item);
     }
 
 }

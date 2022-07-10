@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:foregroundTint="#ff0000"
     tools:context=".addalciphron.AddActivity">
 
     <TextView
@@ -13,12 +14,12 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:background="@drawable/edit_text_border"
         android:drawableEnd="@drawable/ic_baseline_arrow_drop_down_24"
         android:gravity="center_vertical"
-        android:text="Izaberite vrstu"
-        android:background="@drawable/edit_text_border"
-        android:textSize="20sp"
         android:padding="12dp"
+        android:text="Izaberite vrstu"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -47,7 +48,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addDate" />
+        app:layout_constraintTop_toBottomOf="@+id/datum8" />
 
     <TextView
         android:id="@+id/datum7"
@@ -63,17 +64,31 @@
         app:layout_constraintTop_toBottomOf="@+id/geoLatitude" />
 
     <TextView
+        android:id="@+id/datum8"
+        android:layout_width="154dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical"
+        android:text="Stadijum vrste :"
+        android:textColor="#0d6d3d"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addDate" />
+
+    <TextView
         android:id="@+id/datum3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="Pronalazac : "
         android:textColor="#0d6d3d"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/getLocationButton" />
+        app:layout_constraintTop_toBottomOf="@+id/geoAltitude" />
 
     <TextView
         android:id="@+id/datum4"
@@ -99,7 +114,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addDate" />
+        app:layout_constraintTop_toBottomOf="@+id/datum8" />
 
     <TextView
         android:id="@+id/addDate"
@@ -143,11 +158,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:textColor="#a2a2a3"
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/datum3"
-        app:layout_constraintTop_toBottomOf="@+id/getLocationButton" />
+        app:layout_constraintTop_toBottomOf="@+id/geoAltitude" />
 
     <TextView
         android:id="@+id/geoLongitude"
@@ -170,16 +185,6 @@
         android:text="Izaberite datum"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/alciphronName" />
-
-    <Button
-        android:id="@+id/getLocationButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="preuzmi lokaciju"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/geoAltitude" />
 
     <EditText
         android:id="@+id/addDescription"
@@ -216,5 +221,17 @@
         android:text="nazad"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Spinner
+        android:id="@+id/spinnerStadium"
+        android:layout_width="121dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:entries="@array/stadium_species"
+        android:spinnerMode="dropdown"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addDate"
+        tools:ignore="TouchTargetSizeCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

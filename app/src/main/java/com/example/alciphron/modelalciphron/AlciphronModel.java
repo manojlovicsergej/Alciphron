@@ -34,6 +34,12 @@ public class AlciphronModel implements Serializable {
     @ColumnInfo(name="finder")
     private String finder;
 
+    @ColumnInfo(name="code")
+    private String code;
+
+    @ColumnInfo(name="stadium")
+    private String stadijum;
+
 
     public AlciphronModel( String name, String date, String description, String longitude, String latitude , String altitude, String finder) {
         this.name = name;
@@ -53,6 +59,24 @@ public class AlciphronModel implements Serializable {
         this.latitude =  "0";
         this.finder =  "";
         this.altitude="0";
+        this.stadijum = "";
+        this.code= " ";
+    }
+
+    public String getStadijum() {
+        return stadijum;
+    }
+
+    public void setStadijum(String stadijum) {
+        this.stadijum = stadijum;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getAltitude() {
@@ -129,6 +153,8 @@ public class AlciphronModel implements Serializable {
                 ", latitude='" + latitude + '\'' +
                 ", altitude='" + altitude + '\'' +
                 ", finder='" + finder + '\'' +
-                '}';
+                ", code='" + code + '\'' +
+                ", stadijum='" + stadijum + '\'' +
+                '}'+"\n";
     }
 }

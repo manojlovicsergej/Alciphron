@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="stadium_species">
+        <item>I</item>
+        <item>L</item>
+        <item>P</item>
+        <item>0</item>
+    </string-array>
+
+
+
+</resources>
