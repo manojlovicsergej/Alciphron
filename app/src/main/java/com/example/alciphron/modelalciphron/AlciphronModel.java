@@ -40,8 +40,14 @@ public class AlciphronModel implements Serializable {
     @ColumnInfo(name="stadium")
     private String stadijum;
 
+    @ColumnInfo(name="northing")
+    private String northing;
 
-    public AlciphronModel( String name, String date, String description, String longitude, String latitude , String altitude, String finder) {
+    @ColumnInfo(name="easting")
+    private String easting;
+
+
+    public AlciphronModel( String name, String date, String description, String longitude, String latitude , String altitude, String finder,String easting,String northing) {
         this.name = name;
         this.date = date;
         this.description = description;
@@ -49,6 +55,8 @@ public class AlciphronModel implements Serializable {
         this.latitude = latitude;
         this.finder = finder;
         this.altitude = altitude;
+        this.easting = easting;
+        this.northing = northing;
     }
 
     public AlciphronModel(){
@@ -61,6 +69,24 @@ public class AlciphronModel implements Serializable {
         this.altitude="0";
         this.stadijum = "";
         this.code= " ";
+        this.northing = "";
+        this.easting = "";
+    }
+
+    public String getNorthing() {
+        return northing;
+    }
+
+    public void setNorthing(String northing) {
+        this.northing = northing;
+    }
+
+    public String getEasting() {
+        return easting;
+    }
+
+    public void setEasting(String easting) {
+        this.easting = easting;
     }
 
     public String getStadijum() {
@@ -155,6 +181,8 @@ public class AlciphronModel implements Serializable {
                 ", finder='" + finder + '\'' +
                 ", code='" + code + '\'' +
                 ", stadijum='" + stadijum + '\'' +
-                '}'+"\n";
+                ", northing='" + northing + '\'' +
+                ", easting='" + easting + '\'' +
+                '}';
     }
 }

@@ -121,9 +121,6 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, AlciphronLocation.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("alciphronObject",alciphronModel);
-                bundle.putSerializable("geoLatitude",geoLatitude);
-                bundle.putSerializable("geoLongitude",geoLongitude);
-                bundle.putSerializable("geoAltitude",geoAltitude);
                 intent.putExtras(bundle);
 
                 startActivity(intent);
@@ -202,11 +199,11 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 writer = new CSVWriter(new FileWriter(file.getPath()));
             }
-            String dataFirstRow[] = {"Naziv vrste","Stadijum","Datum pronalaska","Geo.sirina","Geo.duzina","Nadmorska visina","Pronalazac","Napomena"};
+            String dataFirstRow[] = {"Naziv vrste","Kod","Stadijum","Datum pronalaska","Geo.sirina","Geo.duzina","Nadmorska visina","Pronalazac","Napomena"};
             writer.writeNext(dataFirstRow);
 
             for(AlciphronModel a : alciphronModelList) {
-                String[] data = {a.getCode(),a.getStadijum(),a.getDate(),a.getLatitude(),a.getLongitude(),a.getAltitude(),a.getFinder(),a.getDescription()};
+                String[] data = {a.getName(),a.getCode(),a.getStadijum(),a.getDate(),a.getEasting(),a.getNorthing(),a.getAltitude(),a.getFinder(),a.getDescription()};
                 writer.writeNext(data);
             }
             writer.close();
@@ -227,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             FileOutputStream fos = new FileOutputStream(file);
             for(AlciphronModel a : alciphronModelList){
-                text = a.getCode() + "|"+ a.getStadijum() +"|" + a.getDate() + "|" + a.getLatitude() + "|" + a.getLongitude() + "|"+ a.getAltitude() +"|"+ a.getFinder() + "|" + a.getDescription() + "\n";
+                text = a.getName() + "|" + a.getCode() + "|"+ a.getStadijum() +"|" + a.getDate() + "|" + a.getEasting() + "|" + a.getNorthing() + "|"+ a.getAltitude() +"|"+ a.getFinder() + "|" + a.getDescription() + "\n";
                 fos.write(text.getBytes());
             }
 
@@ -256,34 +253,37 @@ public class MainActivity extends AppCompatActivity {
 
         for(int i = 0 ; i < alciphronModelList.size();i++){
             hssfRow = hssfSheet.createRow(i);
-            for(int j = 0 ; j < 8;j++){
+            for(int j = 0 ; j < 9;j++){
                 hssfCell = hssfRow.createCell(j);
 
-
                 if(j == 0){
-                    hssfCell.setCellValue(alciphronModelList.get(i).getCode());
+                    hssfCell.setCellValue(alciphronModelList.get(i).getName());
                 }
                 if(j == 1){
-                    hssfCell.setCellValue(alciphronModelList.get(i).getStadijum());
+                    hssfCell.setCellValue(alciphronModelList.get(i).getCode());
                 }
                 if(j == 2){
-                    hssfCell.setCellValue(alciphronModelList.get(i).getDate());
+                    hssfCell.setCellValue(alciphronModelList.get(i).getStadijum());
                 }
                 if(j == 3){
-                    hssfCell.setCellValue(alciphronModelList.get(i).getLatitude());
+                    hssfCell.setCellValue(alciphronModelList.get(i).getDate());
                 }
                 if(j == 4){
-                    hssfCell.setCellValue(alciphronModelList.get(i).getLongitude());
+                    hssfCell.setCellValue(alciphronModelList.get(i).getEasting());
                 }
                 if(j == 5){
-                    hssfCell.setCellValue(alciphronModelList.get(i).getAltitude());
+                    hssfCell.setCellValue(alciphronModelList.get(i).getNorthing());
                 }
                 if(j == 6){
-                    hssfCell.setCellValue(alciphronModelList.get(i).getFinder());
+                    hssfCell.setCellValue(alciphronModelList.get(i).getAltitude());
                 }
                 if(j == 7){
+                    hssfCell.setCellValue(alciphronModelList.get(i).getFinder());
+                }
+                if(j == 8){
                     hssfCell.setCellValue(alciphronModelList.get(i).getDescription());
                 }
+
 
             }
         }
